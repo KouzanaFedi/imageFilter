@@ -15,8 +15,8 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 app.get('/images/:filename', require('./serveFile'));
-app.post('/upload', upload.single('photo'), imageChecker, (req, res) => {
-  const src = req.isImageSafe ? `/images/${req.file.filename}` : '/unsafe.jpg';
+app.post('/', upload.single('photo'), imageChecker, (req, res) => {
+  const src = req.isImageSafe ? `/images/${req.file.filename}` : '/unsafe.jpeg';
   res.render('result', {
     image: src,
     isImageSafe: req.isImageSafe

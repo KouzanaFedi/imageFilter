@@ -1,21 +1,29 @@
 const fs = require('fs');
 const fetch = require('request');
-apiKey = 'acc_0ff6dad5456ef26';
-apiSecret = '18078806cbd0827aeb42a37f82b6b59a';
 
 const imageChecker = (req, res, next) => {
-  const formData = { image: fs.createReadStream(req.file.path) };
-  fetch
-    .post(
-      'https://api.imagga.com/v2/categories/nsfw_beta',
-      { formData },
-      (error, _, body) => {
-        if (error) return res.status(500).send(error);
-        body = JSON.parse(body);
-        req.isImageSafe = body.result.categories[0].name.en === 'safe';
-        return next();
-      }
-    )
-    .auth(apiKey, apiSecret, true);
+  const options = {
+    url: 'https://francecentral.api.cognitive.microsoft.com/vision/v2.1/analyze',
+    qs: {
+      visualFeatures: 'Adult',
+      details: '',
+      language: 'en'
+    },
+    headers: {
+      'Content-Type': 'application/octet-stream',
+      'Ocp-Apim-Subscription-Key': 'f0596e6306724721be9a9aa4ec30bcfd'
+    },
+    body: fs.readFileSync(req.file.path)
+  };
+  fetch.post(options, (err, res, body) => {
+
+    if (err) return res.status(500).send(err);
+    body = JSON.parse(body);
+    if (!body.adult.isAdultContent && !body.adult.isRacyContent && !body.adult.isGoryContent) {
+      req.isImageSafe = true;
+    } else
+      req.isImageSafe = false;
+    return next();
+  });
 };
 module.exports = imageChecker;

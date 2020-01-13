@@ -1,25 +1,32 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Image Checker</title>
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-  </head>
-  <body>
-    <h2>Image Safe ? :<%= isImageSafe %></h2>
 
-    <h1 class="title">Social media</h1>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Image Checker</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
 
-    <div class="image">
-      <div class="image-holder">
-        <img src="<%=image%>" alt="" />
-      </div>
-      <form action="/upload" method="post" enctype="multipart/form-data">
-        <input type="file" accept="image/*" name="photo" />
-        <input type="submit" value="upload" class="button" />
-      </form>
-    </div>
-  </body>
+<body>
+  <%if( !isImageSafe ) {%>
+  <h2 class="warning">
+    This picture's content is against our TOS pls chose another one%>
+  </h2>
+  <%}%>
+
+  <h1 class="title">Social media</h1>
+
+  <div class="image">
+    <div class="image-holder">
+      <img src="<%=image%>" alt="" />
+  </div>
+  <form action="/" method="post" enctype="multipart/form-data">
+    <input type="file" accept="image/*" name="photo" />
+    <input type="submit" value="upload" class="button" />
+  </form>
+  </div>
+</body>
+
 </html>
